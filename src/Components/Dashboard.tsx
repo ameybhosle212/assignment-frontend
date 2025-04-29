@@ -120,6 +120,10 @@ const Dashboard = () => {
         const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
         return total;
     }
+    const checkProductInCart  = (productId: number) => {
+        return cart.filter((item: any) => item.id === productId).length > 0
+        // return cart.some((item: any) => item.id === productId);
+    }
     useEffect(() => {
         const getAllData = async () => {
             setLoading(true)
@@ -302,9 +306,20 @@ const Dashboard = () => {
                                             >
                                                 Close
                                             </button>
-                                            <button onClick={() => addToCart(selectedProduct)} type="button" className="btn btn-primary">
+                                            {
+                                                checkProductInCart(selectedProduct.id) ? 
+                                                (
+                                                    <button onClick={() => {setShowModal(false);setCartModal(true)}} type="button" className="btn btn-primary">
+                                                View Cart
+                                            </button>
+                                                ) : 
+                                                (
+                                                    <button onClick={() => addToCart(selectedProduct)} type="button" className="btn btn-primary">
                                                 Add to Cart
                                             </button>
+                                                )
+                                            }
+                                            
                                         </div>
                                     </div>
                                 </div>
