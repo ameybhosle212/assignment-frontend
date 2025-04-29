@@ -1,9 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from 'react-router-dom'
 import { CircleLoader } from "react-spinners"
 import { Navbar, Nav, Container, Dropdown } from 'react-bootstrap';
+import { Modal, Button } from 'react-bootstrap';
 import '../App.css'
 import { FaShoppingCart } from 'react-icons/fa';
 
@@ -15,9 +16,11 @@ const Dashboard = () => {
     const [search, setSearch] = useState<string>("");
     const [cartCount, setCartCount] = useState(0);
     const [cart, setCart] = useState<any[]>([]);
+    const [orders, setOrders] = useState<any[]>([]);
     const [selectedProduct, setSelectedProduct] = useState<any>();
     const [showModal, setShowModal] = useState(false);
     const [cartModal, setCartModal] = useState(false);
+    const [orderModal, setOrderModal] = useState(false);
     const [filproducts, setFilproducts] = useState<any[]>([]);
     const [category, setCategory] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
@@ -98,6 +101,7 @@ const Dashboard = () => {
             console.log(newProductArray)
             setCart(newProductArray)
         }
+        toast.success("Product Added to Cart")
     }
     const removeFromCart = (product: any) => {
         setCart((prevCart) => {
@@ -120,9 +124,24 @@ const Dashboard = () => {
         const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
         return total;
     }
-    const checkProductInCart  = (productId: number) => {
+    const checkProductInCart = (productId: number) => {
         return cart.filter((item: any) => item.id === productId).length > 0
         // return cart.some((item: any) => item.id === productId);
+    }
+    const checkoutInCart = () => {
+        const ddd = {
+            products: cart,
+            dateOfPurchase: new Date().toLocaleDateString(),
+            total: returnTotal()
+        }
+        console.log(ddd);
+        
+        setOrders([...orders, ddd])
+        setCartCount(0)
+        setCart([]);
+        setCartModal(false)
+        toast.success("Order Placed Successfully")
+
     }
     useEffect(() => {
         const getAllData = async () => {
@@ -135,6 +154,7 @@ const Dashboard = () => {
     }, [])
     return (
         <div>
+            <ToastContainer />
             {loading ?
                 (
                     <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>
@@ -143,6 +163,28 @@ const Dashboard = () => {
                 ) :
                 (
                     <div>
+                        {orderModal && (
+                            <Modal show={orderModal} onHide={() => setOrderModal(false)} size="lg" centered>
+                                <Modal.Header closeButton>
+                                    <Modal.Title>All Orders</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+                                    {orders.map((order, index:number) => (
+                                        <div key={order.id} className="mb-4 border-bottom pb-3">
+                                            <h5>#{index + 1} — Order ID: {index+1}</h5>
+                                            <p><strong>Total Price:</strong> ₹{order.total}</p>
+                                            <p><strong>Product Count:</strong> {order.products.length}</p>
+                                            <p><strong>Date Of Purchase : {order.dateOfPurchase}</strong></p>
+                                        </div>
+                                    ))}
+                                </Modal.Body>
+                                <Modal.Footer>
+                                    <Button variant="secondary" onClick={() => setOrderModal(false)}>
+                                        Close
+                                    </Button>
+                                </Modal.Footer>
+                            </Modal>
+                        )}
                         {cartModal && (
                             <div
                                 className={`modal fade ${cartModal ? 'show' : ''}`}
@@ -225,7 +267,7 @@ const Dashboard = () => {
                                                 <button type="button" className="btn btn-secondary mr-2" onClick={() => setCartModal(false)}>
                                                     Close
                                                 </button>
-                                                {cart.length > 0 && <button type="button" className="btn btn-primary">
+                                                {cart.length > 0 && <button type="button" className="btn btn-primary" onClick={() => checkoutInCart()}>
                                                     Checkout
                                                 </button>}
                                             </div>
@@ -307,19 +349,19 @@ const Dashboard = () => {
                                                 Close
                                             </button>
                                             {
-                                                checkProductInCart(selectedProduct.id) ? 
-                                                (
-                                                    <button onClick={() => {setShowModal(false);setCartModal(true)}} type="button" className="btn btn-primary">
-                                                View Cart
-                                            </button>
-                                                ) : 
-                                                (
-                                                    <button onClick={() => addToCart(selectedProduct)} type="button" className="btn btn-primary">
-                                                Add to Cart
-                                            </button>
-                                                )
+                                                checkProductInCart(selectedProduct.id) ?
+                                                    (
+                                                        <button onClick={() => { setShowModal(false); setCartModal(true) }} type="button" className="btn btn-primary">
+                                                            View Cart
+                                                        </button>
+                                                    ) :
+                                                    (
+                                                        <button onClick={() => addToCart(selectedProduct)} type="button" className="btn btn-primary">
+                                                            Add to Cart
+                                                        </button>
+                                                    )
                                             }
-                                            
+
                                         </div>
                                     </div>
                                 </div>
@@ -354,7 +396,7 @@ const Dashboard = () => {
                                 </Nav>
                                 <Nav>
                                     <Nav.Link href="#login">{email || "user@gmail.com"}</Nav.Link>
-                                    <Nav.Link href="#signup">My Orders</Nav.Link>
+                                    <Nav.Link onClick={() => setOrderModal(true)} href="#signup">My Orders</Nav.Link>
                                     <Nav.Link href="#contact">My Accounts</Nav.Link>
                                     <Nav.Link onClick={() => setCartModal(!cartModal)} href="#help"><FaShoppingCart size={22} color="white" />  {cartCount}</Nav.Link>
                                 </Nav>
