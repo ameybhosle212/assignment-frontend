@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from 'react-router-dom'
-import { Circles } from 'react-loader-spinner';
+import { CircleLoader } from "react-spinners"
 import { Navbar, Nav, Container, Dropdown } from 'react-bootstrap';
 import '../App.css'
 import { FaShoppingCart, FaUser } from 'react-icons/fa';
@@ -133,7 +133,7 @@ const Dashboard = () => {
             {loading ?
                 (
                     <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>
-                        <Circles height="80" width="80" color="#4fa94d" ariaLabel="loading" />
+                        <CircleLoader color="#4fa94d" />
                     </div>
                 ) :
                 (

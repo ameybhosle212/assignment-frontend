@@ -1,7 +1,8 @@
 import axios from "axios";
 import { useState } from "react"
 import { ToastContainer, toast } from 'react-toastify';
-import { Circles } from 'react-loader-spinner';
+// import { Circles } from 'react-loader-spinner';
+import { CircleLoader } from "react-spinners"
 
 
 const Login = () => {
@@ -28,12 +29,12 @@ const Login = () => {
             })
             const newData = JSON.parse(data.body);
             if (newData.status === 'ok' && newData.token.length > 0) {
-                setLoading(false);
+                // setLoading(false);
                 localStorage.setItem("token", newData.token);
                 toast.success("Logged SUccessfully")
-                setTimeout(() => {
+                // setTimeout(() => {
                     window.location.href = '/dashboard';
-                }, 1500);
+                // }, 1500);
             }
             if (newData.status === 'error') {
                 setLoading(false);
@@ -51,7 +52,7 @@ const Login = () => {
             {loading ?
             (
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }} >
-                    <Circles height="80" width="80" color="#4fa94d" ariaLabel="loading" />
+                    <CircleLoader  color="#4fa94d" />
                 </div >
             ) :
             (
