@@ -126,7 +126,6 @@ const Dashboard = () => {
     }
     const checkProductInCart = (productId: number) => {
         return cart.filter((item: any) => item.id === productId).length > 0
-        // return cart.some((item: any) => item.id === productId);
     }
     const checkoutInCart = () => {
         const ddd = {
@@ -166,7 +165,7 @@ const Dashboard = () => {
                         {orderModal && (
                             <Modal show={orderModal} onHide={() => setOrderModal(false)} size="lg" centered>
                                 <Modal.Header closeButton>
-                                    <Modal.Title>All Orders</Modal.Title>
+                                    <Modal.Title>{orders.length > 0 ? "All Orders" : "Please Order SOmethings"}</Modal.Title>
                                 </Modal.Header>
                                 <Modal.Body>
                                     {orders.map((order, index:number) => (
@@ -294,7 +293,6 @@ const Dashboard = () => {
                                         </div>
                                         <div className="modal-body">
                                             <div className="row">
-                                                {/* Image Carousel */}
                                                 <div className="col-md-6">
                                                     <div
                                                         id="carouselExampleIndicators"
@@ -369,7 +367,6 @@ const Dashboard = () => {
                         )}
                         <Navbar bg="dark" variant="dark" expand="lg">
                             <Container>
-                                {/* Left Side Options */}
                                 <Navbar.Brand href="#home">MY SPACE</Navbar.Brand>
                                 <Nav className="me-auto">
                                     <Dropdown>
@@ -395,17 +392,16 @@ const Dashboard = () => {
                                     </Dropdown>
                                 </Nav>
                                 <Nav>
-                                    <Nav.Link href="#login">{email || "user@gmail.com"}</Nav.Link>
-                                    <Nav.Link onClick={() => setOrderModal(true)} href="#signup">My Orders</Nav.Link>
-                                    <Nav.Link href="#contact">My Accounts</Nav.Link>
-                                    <Nav.Link onClick={() => setCartModal(!cartModal)} href="#help"><FaShoppingCart size={22} color="white" />  {cartCount}</Nav.Link>
+                                    <Nav.Link>{email || "user@gmail.com"}</Nav.Link>
+                                    <Nav.Link onClick={() => setOrderModal(true)}>My Orders</Nav.Link>
+                                    <Nav.Link>My Accounts</Nav.Link>
+                                    <Nav.Link onClick={() => setCartModal(!cartModal)}><FaShoppingCart size={22} color="white" />  {cartCount}</Nav.Link>
                                 </Nav>
                             </Container>
                         </Navbar>
                         <div className="container mt-5">
                             <h1 className="text-center mb-4">Products</h1>
 
-                            {/* Centered Search Bar */}
                             <div className="d-flex justify-content-center mb-5">
                                 <form className="d-flex" style={{ width: "400px" }}>
                                     <div className="input-group w-100">
