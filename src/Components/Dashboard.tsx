@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { CircleLoader } from "react-spinners"
 import { Navbar, Nav, Container, Dropdown } from 'react-bootstrap';
 import '../App.css'
-import { FaShoppingCart, FaUser } from 'react-icons/fa';
+import { FaShoppingCart } from 'react-icons/fa';
 
 
 const Dashboard = () => {
@@ -64,6 +64,7 @@ const Dashboard = () => {
             navigate("/login")
         }
     }
+    console.log(search)
     const getAllCategory = (value: any) => {
         const pset = new Set()
         for (let i = 0; i < value.length; i++) {
