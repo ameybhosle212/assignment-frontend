@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Circles } from 'react-loader-spinner';
+import { CircleLoader } from "react-spinners"
 
 const Profile = () => {
   const [userData, setUserData] = useState<any>();
@@ -35,12 +35,8 @@ const Profile = () => {
     <>
       {loading ? (
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>
-          <Circles
-            height="80"
-            width="80"
+          <CircleLoader
             color="#4fa94d"
-            ariaLabel="loading"
-            visible={true}
           />
         </div>
       ) : (
